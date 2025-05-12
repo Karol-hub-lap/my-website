@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabarak University Legal Citation Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        .header-bg {
+            background-color: #993133;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #62ae50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4e8c3d;
+        }
+        .btn-secondary {
+            background-color: #d2ae6d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #b89354;
+        }
+        .border-primary {
+            border-color: #62ae50;
+        }
+        .text-primary {
+            color: #62ae50;
+        }
+        .text-secondary {
+            color: #993133;
+        }
+        .text-accent {
+            color: #d2ae6d;
+        }
+        .citation-type-btn {
+            transition: all 0.3s ease;
+            border: 1px solid #d2ae6d;
+        }
+        .citation-type-btn:hover {
+            transform: translateY(-2px);
+            background-color: #f0e6d2;
+        }
+        .citation-type-btn.active {
+            background-color: #62ae50;
+            color: white;
+            border-color: #62ae50;
+        }
+        .citation-result {
+            min-height: 100px;
+            border-left: 4px solid #993133;
+            background-color: white;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #62ae50;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .citation-types-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .mode-selector {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #d2ae6d;
+        }
+        .mode-btn {
+            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #62ae50;
+        }
+        .mode-btn.active {
+            background-color: #62ae50;
+            color: white;
+        }
+        .mode-btn:not(.active) {
+            background-color: white;
+            color: #62ae50;
+        }
+        .mode-btn:not(.active):hover {
+            background-color: #f0f7ee;
+        }
+        .single-line-example {
+            background-color: #f8f5ec;
+            border-left: 4px solid #d2ae6d;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: #993133;
+        }
+        .error-message {
+            color: #993133;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .feedback-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid #d2ae6d;
+        }
+        .feedback-toggle {
+            background-color: #993133;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .feedback-toggle:hover {
+            background-color: #7a2628;
+        }
+        .feedback-toggle i {
+            margin-right: 0.5rem;
+        }
+        .jotform-embed-container {
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        input, select, textarea {
+            border: 1px solid #d2ae6d !important;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #62ae50 !important;
+            box-shadow: 0 0 0 1px #62ae50 !important;
+        }
+        .radio-btn:checked {
+            background-color: #62ae50 !important;
+            border-color: #62ae50 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bg py-4 mb-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center mb-2">Kabarak University Legal Citation Generator</h1>
+            <p class="text-center text-white opacity-90">Generate citations following the Kabarak University Legal Citation Guide (Primary Draft 02/02/2023)</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+            <h2 class="text-lg font-semibold mb-3 text-secondary">Select Input Mode</h2>
+            <div class="flex flex-wrap gap-3">
+                <button id="single-line-mode" class="mode-btn active" onclick="setInputMode('single-line')">
+                    <i class="fas fa-bolt mr-2"></i> Quick Single-Line
+                </button>
+                <button id="interactive-mode" class="mode-btn" onclick="setInputMode('interactive')">
+                    <i class="fas fa-list-ul mr-2"></i> Interactive Step-by-Step
+                </button>
+            </div>
+        </div>
+
+        <!-- Single-Line Input Container -->
+        <div id="single-line-container" class="bg-white rounded-lg shadow-md p-6 mb-8 border border-primary">
+            <h2 class="text-xl font-semibold mb-4 text-secondary">Quick Citation Entry</h2>
+            <div class="mb-4">
+                <label for="single-line-input" class="block text-sm font-medium text-secondary mb-1">Enter source details in one line</label>
+                <input type="text" id="single-line-input" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="John Doe, The Future of AI, 2023, Penguin Books, 15, Nairobi">
+                <p class="text-xs text-accent mt-1">Format: Author, Title, Year, Publisher, [Page], [City]</p>
+                <div class="single-line-example">
+                    <strong>Examples:</strong><br>
+                    Book: <em>FX Njenga, International law and world order problems, 2001, Moi University Press, 15, Nairobi</em><br>
+                    Journal: <em>Rahab Wakuraya Mureithi, 'Challenges in litigating under Kenya's Protection from Domestic Violence Act 2015', 2018, Kabarak Journal of Law and Ethics, 3(1), 87</em>
+                </div>
+                <div id="single-line-error" class="error-message hidden"></div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between gap-4">
+                <div class="w-full md:w-1/2">
+                    <label for="source-type" class="block text-sm font-medium text-secondary mb-1">Source Type</label>
+                    <select id="source-type" class="w-full px-极 py-2 rounded-md shadow-sm focus:outline-none">
+                        <option value="book">Book</option>
+                        <option value="journal">Journal Article</option>
+                        <option value="legislation">Legislation</option>
+                        <option value="case-law">Case Law</option>
+                        <option value="international">International Instrument</option>
+                        <option value="newspaper">Newspaper</option>
+                        <option value="dissertation">Dissertation/Thesis</option>
+                        <option value="internet">Internet Resource</option>
+                    </select>
+                </div>
+                <button onclick="parseSingleLineInput()" class="btn-primary py-2 px-4 rounded-md flex items-center justify-center md:justify-end self-end">
+                    <i极fas fa-magic mr-2"></i> Generate Citation
+                </button>
+            </div>
+        </div>
+
+        <!-- Interactive Mode Container -->
+        <div id="interactive-container" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden border border-primary">
+            <h2 class="text-xl font-semibold mb-4 text-secondary">Select Citation Type</h2>
+                        
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6 citation-types-grid">
+                <!-- Books -->
+                <button onclick="showForm('book')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-book mr-2"></i> Books
+                </button>
+                                
+                <!-- Journal Articles -->
+                <button onclick="showForm('journal')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-newspaper mr-2"></i> Journal Articles
+                </button>
+                                
+                <!-- Legislation -->
+                <button onclick="showForm('legislation')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-gavel mr-2"></i> Legislation
+                </button>
+                                
+                <!-- Case Law -->
+                <button onclick="showForm('case-law')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-balance-scale mr-2"></i> Case Law
+                </button>
+                                
+                <!-- International Instruments -->
+                <button onclick="showForm('international')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-globe mr-2"></i> International
+                </button>
+                                
+                <!-- Newspapers -->
+                <button onclick="showForm('newspaper')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-newspaper mr-2"></i> Newspapers
+                </button>
+                                
+                <!-- Dissertations -->
+                <button onclick="showForm('dissertation')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-scroll mr-2"></i> Dissertations
+                </button>
+                                
+                <!-- Internet Resources -->
+                <button onclick="showForm('internet')" class="citation-type-btn hover:bg-gray-100 text-secondary py-2 px-4 rounded flex items-center justify-center">
+                    <i class="fas fa-link mr极"></i> Internet
+                </button>
+            </div>
+
+            <!-- Form Container -->
+            <div id="form-container" class="mb-6">
+                <!-- Default message -->
+                <div id="default-message" class="text-center py-10 text-accent">
+                    <i class="fas fa-hand-pointer text-4xl mb-4 text-primary"></i>
+                    <p>Please select a citation type from the options above</p>
+                </div>
+
+                <!-- Book Form (hidden by default) -->
+                <div id="book-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Book Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="book-author" class="block text-sm font-medium text-secondary mb-1">Author(s)</label>
+                            <input type="text" id="book-author" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="FX Njenga">
+                            <p class="text-xs text-accent mt-1">Format: First name initials and last name (e.g., FX Njenga)</p>
+                        </div>
+                        <div>
+                            <label for="book-title" class="block text-sm font-medium text-secondary mb-1">Book Title</label>
+                            <input type="text" id="book-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="International law and world order problems">
+                        </div>
+                        <div>
+                            <label for="book-publisher" class="block text-sm font-medium text-secondary mb-1">Publisher</label>
+                            <input type="text" id="book-publisher" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Moi University Press">
+                        </div>
+                        <div>
+                            <label for="book-year" class="block text-sm font-medium text-secondary mb-极">Year</label>
+                            <input type="text" id="book-year" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="2001">
+                        </div>
+                        <div>
+                            <label for="book-page" class="block text-sm font-medium text-secondary mb-1">Page Number</label>
+                            <input type="text" id="book-page" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="15">
+                            <p class="text-xs text-accent mt-1">Do not include 'p' or 'pp'</p>
+                        </div>
+                        <div>
+                            <label for="book-city" class="block text-sm font-medium text-secondary mb-1">City (optional)</label>
+                            <input type="text" id="book-city" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Nairobi">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Journal Article Form (hidden by default) -->
+                <div id="journal-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Journal Article Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="journal-author" class="block text-sm font-medium text-secondary mb-1">Author(s)</label>
+                            <input type="text" id="journal-author" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Rahab Wakuraya Mureithi">
+                        </div>
+                        <div>
+                            <label for="journal-title" class="block text-sm font-medium text-secondary mb-1">Article Title</label>
+                            <input type="text" id="journal-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Challenges in litigating under Kenya's Protection from Domestic Violence Act 2015">
+                            <p class="text-xs text-accent mt-1">Use single quotation marks around the title</p>
+                        </div>
+                        <div>
+                            <label for="journal-name" class="block text-sm font-medium text-secondary mb-1">Journal Name</label>
+                            <input type="text" id="journal-name" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Kabarak Journal of Law and Ethics">
+                            <p class="text-xs text-accent mt-1">Do not abbreviate journal names</p>
+                        </div>
+                        <div>
+                            <label for="journal-volume" class="block text-sm font-medium text-secondary mb-1">Volume/Issue</label>
+                            <input type="text" id="journal-volume" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="3(1)">
+                        </div>
+                        <div>
+                            <label for="journal-year" class="block text-sm font-medium text-secondary mb-1">Year</label>
+                            <input type="text" id="journal-year" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="2018">
+                        </div>
+                        <div>
+                            <label for="journal-page" class="block text-sm font-medium text-secondary mb-1">Page Number</label>
+                            <input type="text" id="journal-page" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="87">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legislation Form (hidden by default) -->
+                <div id="legislation-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Legislation Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="legislation-title" class="block text-sm font-medium text-secondary mb-1">Title of Legislation</label>
+                            <input type="text" id="legislation-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Political Parties Act">
+                        </div>
+                        <div>
+                            <label for="legislation-number" class="block text-sm font-medium text-secondary mb-1">Act Number</label>
+                            <input type="text" id="legislation-number" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="21 of 2016">
+                        </div>
+                        <div>
+                            <label for="legislation-section" class="block text-sm font-medium text-secondary mb-1">Section/Article</label>
+                            <input type="text" id="legislation-section" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Section 54">
+                        </div>
+                        <div>
+                            <label for="legislation-constitution" class="block text-sm font-medium text-secondary mb-1">Constitution Year (if applicable)</label>
+                            <input type="text" id="legislation-constitution" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="2010">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Law Form (hidden by default) -->
+                <div id="case-law-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Case Law Citation</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-secondary mb-2">Case Type</label>
+                        <div class="flex flex-wrap gap-3">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="case-type" value="kenyan" checked class="h-4 w-4 radio-btn focus:ring-primary">
+                                <span class="ml-2 text-secondary">Kenyan</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="case-type" value="foreign" class="h-4 w-4 radio-btn focus:ring-primary">
+                                <span class="ml-2 text-secondary">Foreign</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="case-type" value="international" class="h-4 w-4 radio-btn focus:ring-primary">
+                                <span class="ml-2 text-secondary">International</span>
+                            </label>
+                        </div>
+                    </div>
+                                        
+                    <div id="kenyan-case-fields">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="case-parties" class="block text-sm font-medium text-secondary mb-1">极rties</label>
+                                <input type="text" id="case-parties" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Independent Electoral and Boundaries Commission & 4 others v David Ndii & 82 others">
+                            </div>
+                            <div>
+                                <label for="case-number"极block text-sm font-medium text-secondary mb-1">Case Number</label>
+                                <input type="text" id="case-number" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Petition E291 of 2021">
+                            </div>
+                            <div>
+                                <label for="case-decision" class="block text-sm font-medium text-secondary mb-1">Decision Type</label>
+                                <input type="text" id="case-decision" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Judgment of the Court of Appeal at Nairobi">
+                            </div>
+                            <div>
+                                <label for="case-date" class="block text-sm font-medium text-secondary mb-1">Date</label>
+                                <input type="text" id="case-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none, placeholder="20 August 2021">
+                            </div>
+                            <div>
+                                <label for="case-reporter" class="block text-sm font-medium text-secondary mb-1">Law Reporter</label>
+                                <input type="text" id="case-reporter" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="eKLR">
+                                <p class="text-xs text-accent mt-1">Include in square brackets if applicable (e.g., [eKLR])</p>
+                            </div>
+                            <div>
+                                <label for="case-para" class="block text-sm font-medium text-secondary mb-1">Paragraph Number</label>
+                                <input type="text" id="case-para" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="317">
+                            </div>
+                        </div>
+                    </div>
+                                        
+                    <div id="foreign-case-fields" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="foreign-case-parties" class="block text-sm font-medium text-secondary mb-1">Parties</label>
+                                <input type="text" id="foreign-case-parties" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Donoghue v Stevenson">
+                            </div>
+                            <div>
+                                <label for="foreign-case-reporter" class="block text-sm font-medium text-secondary mb-1">Law Reporter</label>
+                                <input type="text" id="foreign-case-reporter" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="[1932] A.C. 562">
+                            </div>
+                            <div>
+                                <label for="foreign-case-date" class="block text-sm font-medium text-secondary mb-1">Date</label>
+                                <input type="text" id="foreign-case-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="26 May 1932">
+                            </div>
+                        </div>
+                    </div>
+                                        
+                    <div id="international-case-fields" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="int-case-parties" class="block text-sm font-medium text-secondary mb-1">Parties</label>
+                                <input type="text" id="int-case-parties" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="African Commission on Human and Peoples' Rights v Kenya">
+                            </div>
+                            <div>
+                                <label for="int-case-decision" class="block text-sm font-medium text-secondary mb-1">Decision Type</label>
+                                <input type="text" id="int-case-decision" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="decision on merits">
+                            </div>
+                            <div>
+                                <label for="int-case-reference" class="block text-sm font-medium text-secondary mb-1">Reference</label>
+                                <input type="text" id="int-case-reference" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="2 AfCLR 9 (2017)">
+                            </div>
+                            <div>
+                                <label for="int-case-para" class="block text-sm font-medium text-secondary mb-1">Paragraph Number</label>
+                                <input type="text" id="int-case-para" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="137">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- International Instruments Form (hidden by default) -->
+                <div id="international-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">International Instrument Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="int-title" class="block text-sm font-medium text-secondary mb-1">Title</label>
+                            <input type="text" id="int-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="African Charter on Human and Peoples' Rights">
+                        </div>
+                        <div>
+                            <label for="int-date" class="block text-sm font-medium text-secondary mb-1">Date of Adoption</label>
+                            <input type="text" id="int-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="27 June 1981">
+                        </div>
+                        <div>
+                            <label for="int-number" class="block text-sm font-medium text-secondary mb-1">Treaty/Resolution Number</label>
+                            <input type="text" id="int-number" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="CAB/LEG/67/3">
+                        </div>
+                        <div>
+                            <label for="int-article" class="block text-sm font-medium text-secondary mb-1">Article/Paragraph</label>
+                            <input type="text" id="int-article" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Article 17">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Newspaper Form (hidden by default) -->
+                <div id="newspaper-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Newspaper Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="news-author" class="block text-sm font-medium text-secondary mb-1">Author</label>
+                            <input type="text" id="news-author" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Luis Franceschi">
+                        </div>
+                        <div>
+                            <label for="news-title" class="block text-sm font-medium text-secondary mb-1">Article Title</label>
+                            <input type="text" id="news-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Time to salvage what remains of Kenya's common wealth">
+                            <p class="text-xs text-accent mt-1">Use single quotation marks around the title</p>
+                        </div>
+                        <div>
+                            <label for="news-source" class="block text-sm font-medium text-secondary mb-1">Newspaper Name</label>
+                            <input type="text" id="news-source" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Daily Nation">
+                        </div>
+                        <div>
+                            <label for="news-date" class="block text极font-medium text-secondary mb-1">Publication Date</label>
+                            <input type="text" id="news-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="15 April 2016">
+                        </div>
+                        <div>
+                            <label for="news-url" class="block text-sm font-medium text-secondary mb-1">URL (optional)</label>
+                            <input type="text" id="news-url" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="http://www.nation.co.ke/...">
+                        </div>
+                        <div>
+                            <label for="news-access-date" class="block text-sm font-medium text-secondary mb-1">Access Date (if URL provided)</label>
+                            <input type="text" id="news-access-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="15 April 2016">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dissertation Form (hidden by default) -->
+                <div id="dissertation-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Dissertation/Thesis Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="diss-author" class="block text-sm font-medium text-secondary mb-1">Author</label>
+                            <input type="text" id="diss-author" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="JB Ojwang">
+                        </div>
+                        <div>
+                            <label for="diss-title" class="block text-sm font-medium text-secondary mb-1">Title极label>
+                            <input type="text" id="diss-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Executive power in independent Kenya's constitutional context">
+                            <p class="text-xs text-accent mt-1">Use single quotation marks around the title</p>
+                        </div>
+                        <div>
+                            <label for="diss-type" class="block text-sm font-medium text-secondary mb-1">Type</label>
+                            <select id="diss-type" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none">
+                                <option value="Unpublished LLM Dissertation">Unpublished LLM Dissertation</option>
+                                <option value="Unpublished PhD Thesis">Unpublished PhD Thesis</option>
+                                <option value="Master's Thesis">Master's Thesis</option>
+                                <option value="Doctoral Dissertation">Doctoral Dissertation</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="diss-institution" class="block text-sm font-medium text-secondary mb-1">Institution</label>
+                            <input type="text" id="diss-institution" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="University of Nairobi">
+                        </div>
+                        <div>
+                            <label for="diss-year" class="block text-sm font-medium text-secondary mb-1">Year</label>
+                            <input type="text" id="diss-year" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="1976">
+                        </div>
+                        <div>
+                            <label for="diss-page" class="block text-sm font-medium text-secondary mb-1">Page Number</label>
+                            <input type="text" id="diss-page" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none, placeholder="38">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internet Resources Form (hidden by default) -->
+                <div id="internet-form" class="hidden">
+                    <h3 class="text-lg font-medium mb-4 text-secondary">Internet Resource Citation</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="web-author" class="block text-sm font-medium text-secondary mb-1">Author/Organization</label>
+                            <input type="text" id="web-author" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Directorate of Information and Communication">
+                        </div>
+                        <div>
+                            <label for="web-title" class="block text-sm font-medium text-secondary mb-1">Title</label>
+                            <input type="text" id="web-title" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="Opening of the 35th Ordinary Session of the AU Assembly">
+                            <p class="text-xs text-accent mt-1">Use single quotation marks around the title</p>
+                        </div>
+                        <div>
+                            <label for="web-source" class="block text-sm font-medium text-secondary mb-1">Source</label>
+                            <input type="text" id="web-source" class="w-full px-3 py-2 rounded-md shadow-sm focus:极line-none" placeholder="African Union">
+                        </div>
+                        <div>
+                            <label for="web-date" class="block text-sm font-medium text-secondary mb-1">Publication Date</label>
+                            <input type="text" id="web-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="5 February 2022">
+                        </div>
+                        <div>
+                            <label for="web-url" class="block text-sm font-medium text-secondary mb-1">URL</label>
+                            <input type="text" id="web-url" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="https://au.int/en/newsevents/...">
+                        </div>
+                        <div>
+                            <label for="web-access-date" class="block text-sm font-medium text-secondary mb-1">Access Date</label>
+                            <input type="text" id="web-access-date" class="w-full px-3 py-2 rounded-md shadow-sm focus:outline-none" placeholder="23 February 2022">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generate Citation Button (Single button for all forms) -->
+                <div class="mt-6">
+                    <button onclick="generateCitation()" class="btn-primary w-full py-2 px-4 rounded-md flex items-center justify-center">
+                        <i class="fas fa-magic mr-2"></i> Generate Citation
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Container -->
+        <div class="rounded-lg p-4 citation-result">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-medium text-secondary">Generated Citation</h3>
+                <button id="copy-btn" onclick="copyCitation()" class="btn-secondary py-1 px-3 rounded text-sm flex items-center">
+                    <i class="fas fa-copy mr-1"></i> Copy
+                </button>
+            </div>
+            <div id="citation-output" class="text-secondary">
+                <p class="italic text-accent">Your generated citation will appear here.</p>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h2 class="text-xl font-semibold mb-4 text-secondary">Feedback & Support</h2>
+            <p class="text-secondary mb-4 opacity-80">We value your feedback to improve this tool. Please let us know about your experience or report any issues.</p>
+                        
+            <div id="feedback-toggle" class="feedback-toggle" onclick="toggleFeedbackForm()">
+                <i class="fas fa-comment-alt"></i> Provide Feedback
+            </div>
+                        
+            <div id="jotform-container" class="jotform-embed-container hidden">
+                <script src='https://cdn.jotfor.ms/agent/embedjs/0196baf9fd94725e84c1aabb1ee5302e823e/embed.js?skipWelcome=1&maximizable=1'></script>
+            </div>
+        </div>
+
+        <footer class="text-center text-secondary text-sm mt-8 opacity-70">
+            <p>© 2023 Kabarak University Legal Citation Generator. Follows the Kabarak University Legal Citation Guide (Primary Draft 02/02/2023).</p>
+            <p class="mt-1">This tool helps format citations but always verify against the official guide.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Set input mode (single-line or interactive)
+        function setInputMode(mode) {
+            if (mode === 'single-line') {
+                document.getElementById('single-line-container').classList.remove('hidden');
+                document.getElementById('interactive-container').classList.add('hidden');
+                document.getElementById('single-line-mode').classList.add('active');
+                document.getElementById('interactive-mode').classList.remove('active');
+            } else {
+                document.getElementById('single-line-container').classList.add('hidden');
+                document.getElementById('interactive-container').classList.remove('hidden');
+                document.getElementById('single-line-mode').classList.remove('active');
+                document.getElementById('interactive-mode').classList.add('active');
+            }
+        }
+
+        // Toggle feedback form visibility
+        function toggleFeedbackForm() {
+            const container = document.getElementById('jotform-container');
+            const toggleBtn = document.getElementById('feedback-toggle');
+                        
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                toggleBtn.innerHTML = '<i class="fas fa-times"></i> Close Feedback Form';
+                toggleBtn.style.backgroundColor = '#7a2628';
+            } else {
+                container.classList.add('hidden');
+                toggleBtn.innerHTML = '<i class="fas fa-comment-alt"></i> Provide Feedback';
+                toggleBtn.style.backgroundColor = '#993133';
+            }
+        }
+
+        // Parse single line input and generate citation
+        function parseSingleLineInput() {
+            const input = document.getElementById('single-line-input').value.trim();
+            const sourceType = document.getElementById('source-type').value;
+            const errorElement = document.getElementById('single-line-error');
+                        
+            // Clear previous error
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+                        
+            if (!input) {
+                showSingleLineError('Please enter source details');
+                return;
+            }
+                        
+            try {
+                if (sourceType === 'book') {
+                    parseBookInput(input);
+                } else if (sourceType === 'journal') {
+                    parseJournalInput(input);
+                } else {
+                    // For other types, fall back to interactive mode
+                    showSingleLineError('This source type requires interactive input. Please switch to interactive mode.');
+                    setInputMode('interactive');
+                    showForm(sourceType);
+                }
+            } catch (error) {
+                showSingleLineError(error.message);
+            }
+        }
+
+        function showSingleLineError(message) {
+            const errorElement = document.getElementById('single-line-error');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        // Parse book input in format: Author, Title, Year, Publisher, [Page], [City]
+        function parseBookInput(input) {
+            const parts = input.split(',').map(part => part.trim());
+                        
+            if (parts.length < 4) {
+                throw new Error('Incomplete input. Format: Author, Title, Year, Publisher, [Page], [City]');
+            }
+                        
+            const author = parts[0];
+            const title = parts[1];
+            const year = parts[2];
+            const publisher = parts[3];
+            const page = parts.length > 4 ? parts[4] : '';
+            const city = parts.length > 5 ? parts[5] : '';
+                        
+            // Validate required fields
+            if (!author || !title || !year || !publisher) {
+                throw new Error('Author, Title, Year, and Publisher are required');
+            }
+                        
+            // Validate year format
+            if (!/^\d{4}$/.test(year)) {
+                throw new Error('Year should be a 4-digit number');
+            }
+                        
+            // Populate the book form (even though it's hidden) in case user switches to interactive mode
+            document.getElementById('book-author').value = author;
+            document.getElementById('book-title').value = title;
+            document.getElementById('book-publisher').value = publisher;
+            document.getElementById('book-year').value = year;
+            document.getElementById('book-page').value = page;
+            document.getElementById('book-city').value = city;
+                        
+            // Generate the citation directly
+            generateBookCitation();
+        }
+
+        // Parse journal input in format: Author, 'Title', Year, Journal Name, Volume(Issue), Page
+        function parseJournalInput(input) {
+            // Check if title is in single quotes
+            const titleMatch = input.match(/'([^']+)'/);
+            if (!titleMatch) {
+                throw new Error('Journal article title must be enclosed in single quotes');
+            }
+                        
+            const title = titleMatch[1];
+            const beforeTitle = input.substring(0, titleMatch.index).trim();
+            const afterTitle = input.substring(titleMatch.index + titleMatch[0].length).trim();
+                        
+            // Split author from before title
+            const author = beforeTitle;
+                        
+            // Split remaining parts after title
+            const parts = afterTitle.split(',').map(part => part.trim());
+                        
+            if (parts.length < 4) {
+                throw new Error('Incomplete input. Format: Author, \'Title\', Year, Journal Name, Volume(Issue), Page');
+            }
+                        
+            const year = parts[0];
+            const journalName = parts[1];
+            const volume = parts.length > 2 ? parts[2] : '';
+            const page = parts.length > 3 ? parts[3] : '';
+                        
+            // Validate required fields
+            if (!author || !title || !year || !journalName) {
+                throw new Error('Author, Title, Year, and Journal Name are required');
+            }
+                        
+            // Validate year format
+            if (!/^\d{4}$/.test(year)) {
+                throw new Error('Year should be a 4-digit number');
+            }
+                        
+            // Populate the journal form
+            document.getElementById('journal-author').value = author;
+            document.getElementById('journal-title').value = title;
+            document.getElementById('journal-name').value = journalName;
+            document.getElementById('journal-year').value = year;
+            document.getElementById('journal-volume').value = volume;
+            document.getElementById('journal-page').value = page;
+                        
+            // Generate the citation directly
+            generateJournalCitation();
+        }
+
+        // Show the selected form and hide others
+        function showForm(formType) {
+            // Hide all forms
+            document.getElementById('default-message').classList.add('hidden');
+            document.getElementById('book-form').classList.add('hidden');
+            document.getElementById('journal-form').classList.add('hidden');
+            document.getElementById('legislation-form').classList.add('hidden');
+            document.getElementById('case-law-form').classList.add('hidden');
+            document.getElementById('international-form').classList.add('hidden');
+            document.getElementById('newspaper-form').classList.add('hidden');
+            document.getElementById('dissertation-form').classList.add('hidden');
+            document.getElementById('internet-form').classList.add('hidden');
+                        
+            // Show the selected form
+            document.getElementById(formType + '-form').classList.remove('hidden');
+                        
+            // Clear the citation output
+            document.getElementById('citation-output').innerHTML = '<p class="italic text-accent">Your generated citation will appear here.</p>';
+        }
+
+        // Handle case type radio buttons
+        document.querySelectorAll('input[name="case-type"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('kenyan-case-fields').classList.add('hidden');
+                document.getElementById('foreign-case-fields').classList.add('hidden');
+                document.getElementById('international-case-fields').classList.add('hidden');
+                                
+                if (this.value === 'kenyan') {
+                    document.getElementById('kenyan-case-fields').classList.remove('hidden');
+                } else if (this.value === 'foreign') {
+                    document.getElementById('foreign-case-fields').classList.remove('hidden');
+                } else if (this.value === 'international') {
+                    document.getElementById('international-case-fields').classList.remove('hidden');
+                }
+            });
+        });
+
+        // Generate citation based on active form
+        function generateCitation() {
+            const activeForm = document.querySelector('#form-container > div:not(.hidden)');
+            if (!activeForm) return;
+                        
+            const formId = activeForm.id;
+                        
+            if (formId === 'book-form') {
+                generateBookCitation();
+            } else if (formId === 'journal-form') {
+                generateJournalCitation();
+            } else if (formId === 'legislation-form') {
+                generateLegislationCitation();
+            } else if (formId === 'case-law-form') {
+                generateCaseCitation();
+            } else if (formId === 'international-form') {
+                generateInternationalCitation();
+            } else if (formId === 'newspaper-form') {
+                generateNewspaperCitation();
+            } else if (formId === 'dissertation-form') {
+                generateDissertationCitation();
+            } else if (formId === 'internet-form') {
+                generateInternetCitation();
+            }
+        }
+
+        // Generate Book Citation
+        function generateBookCitation() {
+            const author = document.getElementById('book-author').value.trim();
+            const title = document.getElementById('book-title').value.trim();
+            const publisher = document.getElementById('book-publisher').value.trim();
+            const year = document.getElementById('book-year').value.trim();
+            const page = document.getElementById('book-page').value.trim();
+            const city = document.getElementById('book-city').value.trim();
+                        
+            if (!author || !title || !publisher || !year) {
+                alert('Please fill in all required fields (Author, Title, Publisher, Year)');
+                return;
+            }
+                        
+            let citation = author + ', ';
+                        
+            // Add title (italicized)
+            citation += '<em>' + title + '</em>, ';
+                        
+            // Add city if provided
+            if (city) {
+                citation += city + ', ';
+            }
+                        
+            // Add publisher and year
+            citation += publisher + ', ' + year;
+                        
+            // Add page number if provided
+            if (page) {
+                citation += ', ' + page;
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Journal Article Citation
+        function generateJournalCitation() {
+            const author = document.getElementById('journal-author').value.trim();
+            const title = document.getElementById('journal-title').value.trim();
+            const volume = document.getElementById('journal-volume').value.trim();
+            const journalName = document.getElementById('journal-name').value.trim();
+            const year = document.getElementById('journal-year').value.trim();
+            const page = document.getElementById('journal-page').value.trim();
+                        
+            if (!author || !title || !journalName || !year) {
+                alert('Please fill in all required fields (Author, Title, Journal Name, Year)');
+                return;
+            }
+                        
+            let citation = author + ', ';
+                        
+            // Add article title in single quotes
+            citation += "'" + title + "', ";
+                        
+            // Add volume if provided
+            if (volume) {
+                citation += volume + ' ';
+            }
+                        
+            // Add journal name (not abbreviated)
+            citation += journalName + ' ';
+                        
+            // Add year in parentheses
+            citation += '(' + year + ')';
+                        
+            // Add page number if provided
+            if (page) {
+                citation += ' ' + page;
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Legislation Citation (FIXED)
+        function generateLegislationCitation() {
+            const title = document.getElementById('legislation-title').value.trim();
+            const number = document.getElementById('legislation-number').value.trim();
+            const section = document.getElementById('legislation-section').value.trim();
+            const constitutionYear = document.getElementById('legislation-constitution').value.trim();
+                        
+            if (!title) {
+                alert('Please fill in at least the Title field');
+                return;
+            }
+                        
+            let citation = title;
+                        
+            // Add act number if provided
+            if (number) {
+                // Check if the number starts with "No" or not
+                if (!number.toLowerCase().startsWith('no')) {
+                    citation += ' (No. ' + number + ')';
+                } else {
+                    citation += ' (' + number + ')';
+                }
+            }
+                        
+            // For constitutions, add year in parentheses
+            if (title.toLowerCase().includes('constitution') && constitutionYear) {
+                citation = title + ' (' + constitutionYear + ')';
+            }
+                        
+            // Add section/article if provided
+            if (section) {
+                // Check if section starts with "Section" or "Article"
+                if (!section.toLowerCase().startsWith('section') && !section.toLowerCase().startsWith('article')) {
+                    citation += ', Section ' + section;
+                } else {
+                    citation += ', ' + section;
+                }
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Case Law Citation
+        function generateCaseCitation() {
+            const caseType = document.querySelector('input[name="case-type"]:checked').value;
+                        
+            if (caseType === 'kenyan') {
+                const parties = document.getElementById('case-parties').value.trim();
+                const caseNumber = document.getElementById('case-number').value.trim();
+                const decision = document.getElementById('case-decision').value.trim();
+                const date = document.getElementById('case-date').value.trim();
+                const reporter = document.getElementById('case-reporter').value.trim();
+                const para = document.getElementById('case-para').value.trim();
+                                
+                if (!parties || !caseNumber || !decision || !date) {
+                    alert('Please fill in all required fields (Parties, Case Number, Decision Type, Date)');
+                    return;
+                }
+                                
+                let citation = parties + ', ';
+                citation += caseNumber + ', ';
+                citation += decision + ', ';
+                citation += date;
+                                
+                // Add reporter if provided
+                if (reporter) {
+                    // Check if reporter is already in brackets
+                    if (!reporter.startsWith('[') && !reporter.endsWith(']')) {
+                        citation += ', [' + reporter + ']';
+                    } else {
+                        citation += ', ' + reporter;
+                    }
+                }
+                                
+                // Add paragraph if provided
+                if (para) {
+                    citation += ', para ' + para;
+                }
+                                
+                // End with full stop
+                citation += '.';
+                                
+                document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+            } else if (caseType === 'foreign') {
+                const parties = document.getElementById('foreign-case-parties').value.trim();
+                const reporter = document.getElementById('foreign-case-reporter').value.trim();
+                const date = document.getElementById('foreign-case-date').value.trim();
+                                
+                if (!parties || !reporter || !date) {
+                    alert('Please fill in all required fields (Parties, Law Reporter, Date)');
+                    return;
+                }
+                                
+                let citation = parties + ' ';
+                citation += reporter + ' ';
+                citation += '(' + date + ')';
+                                
+                // End with full stop
+                citation += '.';
+                                
+                document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+            } else if (caseType === 'international') {
+                const parties = document.getElementById('int-case-parties').value.trim();
+                const decision = document.getElementById('int-case-decision').value.trim();
+                const reference = document.getElementById('int-case-reference').value.trim();
+                const para = document.getElementById('int-case-para').value.trim();
+                                
+                if (!parties || !decision || !reference) {
+                    alert('Please fill in all required fields (Parties, Decision Type, Reference)');
+                    return;
+                }
+                                
+                let citation = parties + ' ';
+                citation += '(' + decision + '), ';
+                citation += reference;
+                                
+                // Add paragraph if provided
+                if (para) {
+                    citation += ', para ' + para;
+                }
+                                
+                // End with full stop
+                citation += '.';
+                                
+                document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+            }
+        }
+
+        // Generate International Instrument Citation
+        function generateInternationalCitation() {
+            const title = document.getElementById('int-title').value.trim();
+            const date = document.getElementById('int-date').value.trim();
+            const number = document.getElementById('int-number').value.trim();
+            const article = document.getElementById('int-article').value.trim();
+                        
+            if (!title || !date) {
+                alert('Please fill in all required fields (Title, Date of Adoption)');
+                return;
+            }
+                        
+            let citation = title + ', ';
+            citation += date + ', ';
+                        
+            // Add treaty/resolution number if provided
+            if (number) {
+                citation += number + ', ';
+            }
+                        
+            // Add article/paragraph if provided
+            if (article) {
+                // Check if article starts with "Article" or "para"
+                if (!article.toLowerCase().startsWith('article') && !article.toLowerCase().startsWith('para')) {
+                    if (article.toLowerCase().includes('para')) {
+                        citation += article;
+                    } else {
+                        citation += 'Article ' + article;
+                    }
+                } else {
+                    citation += article;
+                }
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Newspaper Citation
+        function generateNewspaperCitation() {
+            const author = document.getElementById('news-author').value.trim();
+            const title = document.getElementById('news-title').value.trim();
+            const source = document.getElementById('news-source').value.trim();
+            const date = document.getElementById('news-date').value.trim();
+            const url = document.getElementById('news-url').value.trim();
+            const accessDate = document.getElementById('news-access-date').value.trim();
+                        
+            if (!author || !title || !source || !date) {
+                alert('Please fill in all required fields (Author, Title, Newspaper Name, Date)');
+                return;
+            }
+                        
+            let citation = author + ', ';
+                        
+            // Add article title in single quotes
+            citation += "'" + title + "' ";
+                        
+            // Add newspaper name
+            citation += source + ', ';
+                        
+            // Add date
+            citation += date;
+                        
+            // Add URL and access date if provided
+            if (url) {
+                citation += ' —<' + url + '>';
+                                
+                if (accessDate) {
+                    citation += ' on ' + accessDate;
+                }
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Dissertation Citation
+        function generateDissertationCitation() {
+            const author = document.getElementById('diss-author').value.trim();
+            const title = document.getElementById('diss-title').value.trim();
+            const type = document.getElementById('diss-type').value;
+            const institution = document.getElementById('diss-institution').value.trim();
+            const year = document.getElementById('diss-year').value.trim();
+            const page = document.getElementById('diss-page').value.trim();
+                        
+            if (!author || !title || !institution || !year) {
+                alert('Please fill in all required fields (Author, Title, Institution, Year)');
+                return;
+            }
+                        
+            let citation = author + ', ';
+                        
+            // Add title in single quotes
+            citation += "'" + title + "', ";
+                        
+            // Add type
+            citation += type + ', ';
+                        
+            // Add institution and year
+            citation += institution + ', ' + year;
+                        
+            // Add page number if provided
+            if (page) {
+                citation += ', ' + page;
+            }
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Generate Internet Resource Citation
+        function generateInternetCitation() {
+            const author = document.getElementById('极-author').value.trim();
+            const title = document.getElementById('web-title').value.trim();
+            const source = document.getElementById('web-source').value.trim();
+            const date = document.getElementById('web-date').value.trim();
+            const url = document.getElementById('web-url').value.trim();
+            const accessDate = document.getElementById('web-access-date').value.trim();
+                        
+            if (!author || !title || !source || !date || !url || !accessDate) {
+                alert('Please fill in all required fields (Author, Title, Source, Date, URL, Access Date)');
+                return;
+            }
+                        
+            let citation = author + ', ';
+                        
+            // Add title in single quotes
+            citation += "'" + title + "' ";
+                        
+            // Add source and date
+            citation += source + ', ';
+            citation += date;
+                        
+            // Add URL and access date
+            citation += ' —<' + url + '> on ' + accessDate;
+                        
+            // End with full stop
+            citation += '.';
+                        
+            document.getElementById('citation-output').innerHTML = '<p>' + citation + '</p>';
+        }
+
+        // Copy citation to clipboard
+        function copyCitation() {
+            const citationText = document.getElementById('citation-output').textContent;
+                        
+            // Create a temporary textarea element to copy from
+            const textarea = document.createElement('textarea');
+            textarea.value = citationText;
+            document.body.appendChild(textarea);
+            textarea.select();
+                        
+            try {
+                // Execute the copy command
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'Citation copied to clipboard!' : 'Unable to copy citation';
+                                
+                // Change button text temporarily
+                const copyBtn = document.getElementById('copy-btn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                                
+                // Revert after 2 seconds
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy citation: ', err);
+            }
+                        
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
