@@ -6,7 +6,6 @@
     <title>AfriLens Review | African Perspectives on Media & Culture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/disqus@1.0.0/disqus.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
         
@@ -102,14 +101,6 @@
             font-style: italic;
         }
         
-        .disqus-container {
-            margin-top: 3rem;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        
         .form-input {
             border: 1px solid #ddd;
             border-radius: 0.375rem;
@@ -132,6 +123,49 @@
         
         .form-textarea {
             min-height: 150px;
+        }
+        
+        .blog-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            border: 2px dashed #D4A373;
+            border-radius: 8px;
+            background-color: rgba(212, 163, 115, 0.1);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            background-color: rgba(212, 163, 115, 0.2);
+            border-color: #A68A64;
+        }
+        
+        .file-upload i {
+            font-size: 2rem;
+            color: #8B5A2B;
+            margin-bottom: 1rem;
+        }
+        
+        .file-upload p {
+            color: #8B5A2B;
+            text-align: center;
+        }
+        
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
         }
     </style>
 </head>
@@ -203,357 +237,20 @@
     <!-- Featured Quote -->
     <section class="bg-amber-100 py-8">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center relative py-8">
-                <div class="quote-slider hidden absolute inset-0 flex items-center justify-center">
-                    <blockquote class="italic text-lg md:text-xl text-amber-900">
-                        "Until the lions have their own historians, the history of the hunt will always glorify the hunter."
-                        <footer class="mt-2 not-italic font-semibold">— Chinua Achebe</footer>
-                    </blockquote>
-                </div>
-                <div class="quote-slider absolute inset-0 flex items-center justify-center opacity-0">
-                    <blockquote class="italic text-lg md:text-xl text-amber-900">
-                        "The axe forgets; the tree remembers."
-                        <footer class="mt-2 not-italic font-semibold">— African Proverb</footer>
-                    </blockquote>
-                </div>
-                <div class="quote-slider absolute inset-0 flex items-center justify-center opacity-0">
-                    <blockquote class="italic text-lg md:text-xl text-amber-900">
-                        "If you want to go quickly, go alone. If you want to go far, go together."
-                        <footer class="mt-2 not-italic font-semibold">— African Proverb</footer>
-                    </blockquote>
-                </div>
-                <div class="quote-slider absolute inset-0 flex items-center justify-center opacity-0">
-                    <blockquote class="italic text-lg md:text-xl text-amber-900">
-                        "Culture is the widening of the mind and of the spirit."
-                        <footer class="mt-2 not-italic font-semibold">— Jomo Kenyatta</footer>
-                    </blockquote>
-                </div>
+            <div class="max-w-4xl mx-auto text-center py-8">
+                <blockquote class="italic text-lg md:text-xl text-amber-900">
+                    "Law may draft the rules, politics may enforce them—but art, music, literature, and cinema? They slip past the guards, stir the soul, and put power on trial. In Africa, they're not extras; they're the hidden script. Ignore them, and you miss the plot."
+                </blockquote>
             </div>
         </div>
     </section>
     
-    <!-- Trending Content -->
+    <!-- Blog Content -->
     <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="title-font text-3xl font-bold text-center mb-12 text-amber-900">Trending in African Media</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Trending Books -->
-                <div class="bg-amber-50 p-6 rounded-lg shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-book-open text-2xl text-amber-800 mr-3"></i>
-                        <h3 class="title-font text-xl font-bold text-amber-900">Top African Books</h3>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Wizard of the Crow by Ngũgĩ wa Thiong'o</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Half of a Yellow Sun by Chimamanda Ngozi Adichie</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Things Fall Apart by Chinua Achebe</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Stay With Me by Ayọ̀bámi Adébáyọ̀</span>
-                        </li>
-                    </ul>
-                    <div class="mt-6">
-                        <a href="https://www.google.com/search?q=top+african+books" target="_blank" class="text-amber-800 font-medium hover:underline flex items-center">
-                            More on Google Books <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Trending Films -->
-                <div class="bg-amber-50 p-6 rounded-lg shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-film text-2xl text-amber-800 mr-3"></i>
-                        <h3 class="title-font text-xl font-bold text-amber-900">Top African Films</h3>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>The Woman King (2022)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Lionheart (2018)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Tsotsi (2005)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Black Panther: Wakanda Forever (2022)</span>
-                        </li>
-                    </ul>
-                    <div class="mt-6">
-                        <a href="https://www.imdb.com/search/title/?countries=ke|ng|za|gh|zw|tz|ug|bw" target="_blank" class="text-amber-800 font-medium hover:underline flex items-center">
-                            More on IMDb <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Trending Art -->
-                <div class="bg-amber-50 p-6 rounded-lg shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-palette text-2xl text-amber-800 mr-3"></i>
-                        <h3 class="title-font text-xl font-bold text-amber-900">Top African Art</h3>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>El Anatsui - Contemporary Sculpture</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Njideka Akunyili Crosby - Mixed Media</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>Wangechi Mutu - Collage & Sculpture</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-amber-800 mr-2">•</span>
-                            <span>William Kentridge - Drawings & Animation</span>
-                        </li>
-                    </ul>
-                    <div class="mt-6">
-                        <a href="https://www.contemporary-african-art.com/" target="_blank" class="text-amber-800 font-medium hover:underline flex items-center">
-                            More Art Resources <i class="fas fa-external-link-alt ml-2 text-sm"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Featured Reviews -->
-    <section id="reviews" class="py-12 bg-amber-50">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="title-font text-3xl font-bold text-amber-900">Featured Reviews</h2>
-                <a href="#" class="text-amber-800 font-semibold hover:underline">View All Reviews</a>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Review Card 1 -->
-                <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1542204165-65bfec72de6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Movie poster" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-amber-700 text-white text-xs font-bold px-2 py-1 rounded">Cinema</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-2">
-                            <span class="text-xs text-gray-500">June 15, 2023</span>
-                            <span class="mx-2 text-gray-300">|</span>
-                            <span class="text-xs text-gray-500">4 min read</span>
-                        </div>
-                        <h3 class="title-font text-xl font-bold mb-3 text-amber-900">The Woman King: Reclaiming African Warrior Narratives</h3>
-                        <p class="text-gray-600 mb-4">Examining the historical accuracy and cultural significance of this groundbreaking film about the Agojie warriors of Dahomey...</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Dahomey</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Warrior Women</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Hollywood</a>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
-                                <span class="text-sm font-medium">Amina Diallo</span>
-                            </div>
-                            <a href="#review-1" class="text-amber-800 text-sm font-semibold hover:underline">Read More</a>
-                        </div>
-                    </div>
-                </article>
-                
-                <!-- Review Card 2 -->
-                <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Book cover" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-amber-700 text-white text-xs font-bold px-2 py-1 rounded">Books</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-2">
-                            <span class="text-xs text-gray-500">May 28, 2023</span>
-                            <span class="mx-2 text-gray-300">|</span>
-                            <span class="text-xs text-gray-500">7 min read</span>
-                        </div>
-                        <h3 class="title-font text-xl font-bold mb-3 text-amber-900">Half of a Yellow Sun: Unpacking the Nigerian Civil War</h3>
-                        <p class="text-gray-600 mb-4">Chimamanda Ngozi Adichie's masterpiece offers a human perspective on the Biafran War, challenging Western narratives of African conflicts...</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Nigeria</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Historical Fiction</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Postcolonial</a>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
-                                <span class="text-sm font-medium">Kwame Osei</span>
-                            </div>
-                            <a href="#review-2" class="text-amber-800 text-sm font-semibold hover:underline">Read More</a>
-                        </div>
-                    </div>
-                </article>
-                
-                <!-- Review Card 3 -->
-                <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Movie scene" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-amber-700 text-white text-xs font-bold px-2 py-1 rounded">Cinema</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-2">
-                            <span class="text-xs text-gray-500">April 10, 2023</span>
-                            <span class="mx-2 text-gray-300">|</span>
-                            <span class="text-xs text-gray-500">5 min read</span>
-                        </div>
-                        <h3 class="title-font text-xl font-bold mb-3 text-amber-900">Black Panther: Wakanda Forever and African Futurism</h3>
-                        <p class="text-gray-600 mb-4">How Ryan Coogler's sequel expands the Afrofuturist vision while grappling with real-world African political tensions and cultural heritage...</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Afrofuturism</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Marvel</a>
-                            <a href="#" class="tag text-xs px-3 py-1 rounded-full">Representation</a>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
-                                <span class="text-sm font-medium">Naledi Mokoena</span>
-                            </div>
-                            <a href="#review-3" class="text-amber-800 text-sm font-semibold hover:underline">Read More</a>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Sample Full Review (hidden until clicked) -->
-    <div id="review-1" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
-            <div class="p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <h2 class="title-font text-2xl font-bold text-amber-900">The Woman King: Reclaiming African Warrior Narratives</h2>
-                    <button onclick="closeReview()" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="flex items-center mb-6">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Author" class="w-10 h-10 rounded-full mr-3">
-                    <div>
-                        <p class="font-medium">Amina Diallo</p>
-                        <p class="text-sm text-gray-500">June 15, 2023 · 4 min read</p>
-                    </div>
-                </div>
-                
-                <img src="https://images.unsplash.com/photo-1542204165-65bfec72de6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Movie poster" class="w-full h-64 object-cover rounded-lg mb-6">
-                
-                <div class="prose max-w-none">
-                    <p>The 2022 historical epic <em>The Woman King</em>, directed by Gina Prince-Bythewood and starring Viola Davis, has been hailed as a groundbreaking moment for African representation in Hollywood. The film tells the story of the Agojie, the all-female warrior unit that protected the West African kingdom of Dahomey during the 17th to 19th centuries.</p>
-                    
-                    <h3 class="text-xl font-bold mt-6 mb-3 text-amber-800">Historical Context</h3>
-                    <p>Dahomey (present-day Benin) was known for its military prowess and complex social structures. The Agojie, often called "Dahomey Amazons" by European observers, were an elite fighting force that played a crucial role in the kingdom's expansion and defense.</p>
-                    
-                    <p>While the film takes creative liberties with specific events, it captures the essence of these warriors' significance. The production team consulted with historians and descendants of the Agojie to ensure cultural authenticity in costumes, language (Fon), and combat styles.</p>
-                    
-                    <h3 class="text-xl font-bold mt-6 mb-3 text-amber-800">Cultural Significance</h3>
-                    <p>The Woman King challenges the Western narrative that has often portrayed African societies as passive victims of the transatlantic slave trade. Instead, it presents a nuanced view where African kingdoms were complex political entities with agency.</p>
-                    
-                    <p>The film's focus on female warriors also subverts traditional gender roles in historical epics, which typically center male protagonists. This aligns with oral traditions that celebrate the Agojie's strength and discipline.</p>
-                    
-                    <h3 class="text-xl font-bold mt-6 mb-3 text-amber-800">Critical Analysis</h3>
-                    <p>While the film has been praised for its action sequences and performances (particularly Viola Davis as General Nanisca), some scholars have criticized its handling of Dahomey's involvement in the slave trade. The kingdom did participate in the trade before eventually banning it, a complexity the film simplifies for narrative purposes.</p>
-                    
-                    <p>Nevertheless, The Woman King represents an important step in reclaiming African historical narratives from Eurocentric perspectives. Its commercial success ($94 million worldwide) demonstrates audience appetite for such stories.</p>
-                    
-                    <div class="mt-8 p-4 bg-amber-50 rounded-lg">
-                        <h4 class="font-bold mb-2">OSCOLA Citation:</h4>
-                        <p class="citation">Edgerton, GR, 'The Woman King and the Reclamation of African Warrior Narratives' (2023) 45(2) Journal of African Cinema Studies 145-162</p>
-                    </div>
-                </div>
-                
-                <div class="flex flex-wrap gap-2 my-6">
-                    <a href="#" class="tag px-3 py-1 rounded-full">Dahomey</a>
-                    <a href="#" class="tag px-3 py-1 rounded-full">Warrior Women</a>
-                    <a href="#" class="tag px-3 py-1 rounded-full">Hollywood</a>
-                    <a href="#" class="tag px-3 py-1 rounded-full">Historical Film</a>
-                    <a href="#" class="tag px-3 py-1 rounded-full">Representation</a>
-                </div>
-                
-                <div class="flex items-center justify-between mt-8">
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-500 hover:text-amber-800"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-amber-800"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-amber-800"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="text-gray-500 hover:text-amber-800"><i class="fas fa-link"></i></a>
-                    </div>
-                    <button class="btn-primary px-4 py-2 rounded">Join the Conversation</button>
-                </div>
-                
-                <!-- Disqus Comments -->
-                <div class="disqus-container mt-8">
-                    <div id="disqus_thread"></div>
-                    <script>
-                        var disqus_config = function () {
-                            this.page.url = 'https://afrilensreview.com/review-1';
-                            this.page.identifier = 'review-1';
-                        };
-                        (function() {
-                            var d = document, s = d.createElement('script');
-                            s.src = 'https://afrilensreview.disqus.com/embed.js';
-                            s.setAttribute('data-timestamp', +new Date());
-                            (d.head || d.body).appendChild(s);
-                        })();
-                    </script>
-                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Categories Section -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="title-font text-3xl font-bold text-center mb-12 text-amber-900">Explore Our Categories</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <a href="#cinema" class="bg-amber-50 rounded-lg shadow-sm p-8 text-center hover:shadow-md transition group">
-                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-amber-200 transition">
-                        <i class="fas fa-film text-3xl text-amber-800"></i>
-                    </div>
-                    <h3 class="title-font text-xl font-bold mb-2 text-amber-900">Cinema Reviews</h3>
-                    <p class="text-gray-600">Critical analysis of African films and diaspora cinema</p>
-                </a>
-                
-                <a href="#books" class="bg-amber-50 rounded-lg shadow-sm p-8 text-center hover:shadow-md transition group">
-                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-amber-200 transition">
-                        <i class="fas fa-book-open text-3xl text-amber-800"></i>
-                    </div>
-                    <h3 class="title-font text-xl font-bold mb-2 text-amber-900">Book Reviews</h3>
-                    <p class="text-gray-600">African literature through a cultural and legal lens</p>
-                </a>
-                
-                <a href="#culture" class="bg-amber-50 rounded-lg shadow-sm p-8 text-center hover:shadow-md transition group">
-                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-amber-200 transition">
-                        <i class="fas fa-mask text-3xl text-amber-800"></i>
-                    </div>
-                    <h3 class="title-font text-xl font-bold mb-2 text-amber-900">Arts & Culture</h3>
-                    <p class="text-gray-600">Exploring traditional and contemporary African art</p>
-                </a>
-                
-                <a href="#essays" class="bg-amber-50 rounded-lg shadow-sm p-8 text-center hover:shadow-md transition group">
-                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-amber-200 transition">
-                        <i class="fas fa-pen-fancy text-3xl text-amber-800"></i>
-                    </div>
-                    <h3 class="title-font text-xl font-bold mb-2 text-amber-900">Essays & Opinion</h3>
-                    <p class="text-gray-600">Thought-provoking commentary on African media</p>
-                </a>
+            <h2 class="title-font text-3xl font-bold text-center mb-12 text-amber-900">Latest from Our Blog</h2>
+            <div class="max-w-6xl mx-auto">
+                <iframe src="https://afrilense.blogspot.com/" class="blog-iframe"></iframe>
             </div>
         </div>
     </section>
@@ -601,7 +298,67 @@
                         </div>
                         
                         <div class="md:w-1/2 p-8 text-gray-800">
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScX9uJ0ZxX7Jq5o6Q6YwY7Q6YwY7Q6YwY7Q6YwY7Q6YwY7Q6Yw/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+                            <form name="review-submission" method="POST" data-netlify="true" enctype="multipart/form-data" netlify-honeypot="bot-field">
+                                <input type="hidden" name="form-name" value="review-submission">
+                                <p class="hidden">
+                                    <label>Don't fill this out if you're human: <input name="bot-field"></label>
+                                </p>
+                                
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" id="email" name="email" class="form-input" placeholder="Your email address" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="title" class="form-label">Review Title</label>
+                                    <input type="text" id="title" name="title" class="form-input" placeholder="Title of your review" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="category" class="form-label">Category</label>
+                                    <select id="category" name="category" class="form-input" required>
+                                        <option value="">Select a category</option>
+                                        <option value="cinema">Cinema Review</option>
+                                        <option value="books">Book Review</option>
+                                        <option value="art">Art Review</option>
+                                        <option value="culture">Cultural Analysis</option>
+                                        <option value="essay">Essay/Opinion</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="tags" class="form-label">Tags (comma separated)</label>
+                                    <input type="text" id="tags" name="tags" class="form-input" placeholder="e.g., Nigeria, fiction, postcolonial">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Upload Files</label>
+                                    <div class="file-upload" id="file-upload-area">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag & drop your files here or click to browse</p>
+                                        <p class="file-name" id="file-name-display">No file selected</p>
+                                        <input type="file" id="file-upload" name="file-upload" class="hidden" multiple>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="agree-terms" class="rounded border-gray-300 text-amber-600 focus:ring-amber-500 mr-2" required>
+                                        <span class="text-sm">I agree to the terms of submission and confirm this is my original work</span>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold">Submit Review</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -864,38 +621,50 @@
             menu.classList.toggle('hidden');
         });
         
-        // Quote slider animation
-        let currentQuote = 0;
-        const quotes = document.querySelectorAll('.quote-slider');
+        // File upload handling
+        const fileUploadArea = document.getElementById('file-upload-area');
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name-display');
         
-        function rotateQuotes() {
-            quotes.forEach(quote => quote.classList.add('opacity-0'));
-            currentQuote = (currentQuote + 1) % quotes.length;
-            quotes[currentQuote].classList.remove('opacity-0');
-        }
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
         
-        setInterval(rotateQuotes, 4000);
-        
-        // Review modal functionality
-        function openReview(reviewId) {
-            document.getElementById(reviewId).classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeReview() {
-            document.querySelectorAll('[id^="review-"]').forEach(el => {
-                el.classList.add('hidden');
-            });
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Close review when clicking outside
-        document.querySelectorAll('[id^="review-"]').forEach(el => {
-            el.addEventListener('click', function(e) {
-                if (e.target === el) {
-                    closeReview();
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                if (fileInput.files.length === 1) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = `${fileInput.files.length} files selected`;
                 }
-            });
+            } else {
+                fileNameDisplay.textContent = 'No file selected';
+            }
+        });
+        
+        // Drag and drop handling
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.add('bg-amber-200');
+        });
+        
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.classList.remove('bg-amber-200');
+        });
+        
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.classList.remove('bg-amber-200');
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                
+                if (fileInput.files.length === 1) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = `${fileInput.files.length} files selected`;
+                }
+            }
         });
         
         // Form submissions
@@ -919,11 +688,6 @@
                 e.preventDefault();
                 
                 const targetId = this.getAttribute('href');
-                if (targetId.startsWith('#review-')) {
-                    openReview(targetId.substring(1));
-                    return;
-                }
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     targetElement.scrollIntoView({
